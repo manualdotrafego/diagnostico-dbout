@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0A0A0B" />
+<meta name="robots" content="noindex" />
+<title>Diagnóstico de Captação | DBOUT Mídia</title>
+<meta name="description" content="Diagnóstico gratuito de captação para clínicas odontológicas. Leva 60 segundos." />
+<link rel="icon" type="image/png" href="assets/logo-mark-white.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+<!-- Meta Pixel: Pixel Dbout (CORRETO), conta CT01 -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','1053745639787674');
+fbq('track','PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1053745639787674&ev=PageView&noscript=1" alt="" /></noscript>
+
+<style>
+:root{
+  --bg:#0A0A0B;
+  --bg-2:#0F0F11;
+  --card:#141417;
+  --line:rgba(255,255,255,.07);
+  --line-2:rgba(255,255,255,.13);
+  --text:#F4F4F5;
+  --muted:#A1A1AA;
+  --dim:#6B6B74;
+  --lime:#C7F94E;
+  --lime-2:#B4EB2E;
+  --lime-soft:rgba(199,249,78,.10);
+  --lime-line:rgba(199,249,78,.45);
+  --red:#FF5C5C;
+  --r:16px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --display:"Outfit",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{
+  font-family:var(--body);color:var(--text);background:var(--bg);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+/* fundo: brilho lima + grade fina que some nas bordas */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg::before{content:"";position:absolute;inset:-20% -10% auto;height:70vh;
+  background:radial-gradient(60% 60% at 50% 0%,rgba(199,249,78,.13),transparent 70%);
+  transition:transform 1.2s var(--ease),opacity 1.2s var(--ease)}
+.bg::after{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:44px 44px;
+  -webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 0%,#000 30%,transparent 75%);
+          mask-image:radial-gradient(ellipse 70% 55% at 50% 0%,#000 30%,transparent 75%);opacity:.55}
+body.is-impact .bg::before{transform:scale(1.25);opacity:1;
+  background:radial-gradient(60% 60% at 50% 0%,rgba(199,249,78,.22),transparent 70%)}
+
+.app{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;
+  width:100%;max-width:560px;margin:0 auto;padding:0 20px calc(28px + env(safe-area-inset-bottom))}
+
+/* topo */
+.top{position:sticky;top:0;z-index:5;padding:calc(14px + env(safe-area-inset-top)) 0 14px;
+  background:linear-gradient(var(--bg) 70%,transparent)}
+.top-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:34px}
+.logo{height:19px;width:auto;display:block;opacity:.95}
+.back{appearance:none;border:0;background:none;color:var(--muted);font:500 13px var(--body);
+  display:inline-flex;align-items:center;gap:6px;padding:8px 10px 8px 0;cursor:pointer;
+  opacity:0;pointer-events:none;transition:opacity .3s,color .2s}
+.back.on{opacity:1;pointer-events:auto}
+.back:hover{color:var(--text)}
+.back svg{width:16px;height:16px}
+.counter{font:600 12px var(--body);letter-spacing:.08em;color:var(--dim);font-variant-numeric:tabular-nums;
+  opacity:0;transition:opacity .3s}
+.counter.on{opacity:1}
+.counter b{color:var(--text);font-weight:600}
+.bar{display:grid;grid-auto-flow:column;gap:5px;margin-top:12px;opacity:0;transition:opacity .4s}
+.bar.on{opacity:1}
+.seg{height:4px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+.seg i{display:block;height:100%;width:0;background:var(--lime);border-radius:4px;
+  transition:width .55s var(--ease);box-shadow:0 0 12px rgba(199,249,78,.6)}
+.seg.done i{width:100%}
+
+/* telas */
+.stage{position:relative;flex:1;display:flex;flex-direction:column}
+.screen{display:flex;flex-direction:column;flex:1;padding-top:18px;
+  animation:enter .5s var(--ease) both}
+.screen.leaving{animation:leave .28s ease both}
+@keyframes enter{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes leave{to{opacity:0;transform:translateY(-10px)}}
+.reveal{animation:enter .55s var(--ease) both;animation-delay:calc(var(--i,0)*70ms + 80ms)}
+
+.kicker{display:inline-flex;align-items:center;gap:8px;font:600 11.5px var(--body);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--lime);margin-bottom:14px}
+.kicker::before{content:"";width:18px;height:1.5px;background:var(--lime)}
+h1,h2{font-family:var(--display);letter-spacing:-.03em;color:var(--text)}
+h1{font-weight:800;font-size:clamp(34px,8.6vw,48px);line-height:1.02}
+h2{font-weight:700;font-size:clamp(25px,6.6vw,32px);line-height:1.1}
+.hl{color:var(--lime)}
+.lead{color:var(--muted);font-size:16px;line-height:1.55;margin-top:14px}
+.lead strong{color:var(--text);font-weight:600}
+
+/* intro */
+.pill{display:inline-flex;align-items:center;gap:9px;align-self:flex-start;padding:7px 13px 7px 11px;
+  border:1px solid var(--line-2);border-radius:999px;background:rgba(255,255,255,.03);
+  font:500 12.5px var(--body);color:var(--muted);margin-bottom:22px}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(199,249,78,.6);
+  animation:ping 2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(199,249,78,.55)}70%{box-shadow:0 0 0 9px rgba(199,249,78,0)}100%{box-shadow:0 0 0 0 rgba(199,249,78,0)}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:28px}
+.stat{border:1px solid var(--line);border-radius:14px;padding:14px 12px;background:rgba(255,255,255,.02)}
+.stat b{display:block;font:800 22px var(--display);letter-spacing:-.02em;color:var(--text)}
+.stat b em{font-style:normal;color:var(--lime)}
+.stat span{display:block;font-size:11.5px;color:var(--dim);margin-top:3px;line-height:1.3}
+.clients{display:flex;align-items:center;gap:10px;margin-top:22px;color:var(--dim);font-size:12px}
+.clients .logos{display:flex}
+.clients img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:2px solid var(--bg);
+  margin-left:-8px;filter:grayscale(1) contrast(1.05);background:#fff}
+.clients img:first-child{margin-left:0}
+
+/* botões */
+.foot{margin-top:auto;padding-top:26px}
+.btn{appearance:none;border:0;width:100%;height:58px;border-radius:15px;cursor:pointer;
+  background:var(--lime);color:#0A0A0B;font:700 17px var(--display);letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:10px;position:relative;overflow:hidden;
+  box-shadow:0 14px 34px -14px rgba(199,249,78,.65),inset 0 -2px 0 rgba(0,0,0,.12);
+  transition:transform .15s var(--ease),box-shadow .25s,opacity .2s}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);
+  transform:translateX(-120%);animation:shine 3.6s 1.2s infinite}
+@keyframes shine{0%{transform:translateX(-120%)}35%,100%{transform:translateX(120%)}}
+.btn svg{width:19px;height:19px;transition:transform .25s var(--ease)}
+.btn:hover svg{transform:translateX(4px)}
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.btn:disabled::after{display:none}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line-2);box-shadow:none}
+.btn.ghost::after{display:none}
+.micro{text-align:center;color:var(--dim);font-size:12.5px;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:6px}
+.micro svg{width:13px;height:13px}
+:focus-visible{outline:2px solid var(--lime);outline-offset:3px;border-radius:10px}
+h1:focus,h2:focus,h1:focus-visible,h2:focus-visible{outline:none}
+
+/* opções */
+.q-head{margin-bottom:24px}
+.q-head .lead{font-size:15px;margin-top:10px}
+.opts{display:grid;gap:10px}
+.opt{appearance:none;width:100%;text-align:left;cursor:pointer;color:var(--text);font:500 16px var(--body);
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;
+  padding:15px 16px;min-height:62px;border-radius:var(--r);border:1px solid var(--line-2);
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));
+  transition:border-color .2s,background .2s,transform .18s var(--ease)}
+.opt:hover{border-color:rgba(199,249,78,.38);transform:translateY(-1px)}
+.opt .ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--text);transition:all .2s}
+.opt .ico svg{width:19px;height:19px}
+.opt .txt small{display:block;color:var(--dim);font-size:12.5px;font-weight:400;margin-top:2px}
+.opt .key{width:24px;height:24px;border-radius:7px;border:1px solid var(--line-2);display:grid;place-items:center;
+  font:600 11px var(--body);color:var(--dim);transition:all .2s}
+.opt.sel{border-color:var(--lime);background:linear-gradient(180deg,rgba(199,249,78,.13),rgba(199,249,78,.05))}
+.opt.sel .ico{background:var(--lime);color:#0A0A0B;border-color:var(--lime)}
+.opt.sel .key{background:var(--lime);border-color:var(--lime);color:#0A0A0B}
+.opt.sel .key span{display:none}
+.opt.sel .key::after{content:"";width:10px;height:6px;border-left:2px solid #0A0A0B;border-bottom:2px solid #0A0A0B;transform:rotate(-45deg) translate(1px,-1px)}
+.opts.locked .opt:not(.sel){opacity:.45}
+
+/* cadeiras visuais */
+.chairs{display:flex;gap:3px;align-items:center}
+.chairs i{width:7px;height:16px;border-radius:2.5px;background:var(--lime);opacity:.9}
+.chairs i.g{background:transparent;border:1.5px dashed rgba(199,249,78,.55)}
+.chairs b{font:700 13px var(--display);color:var(--lime);margin-left:3px}
+.opt.sel .chairs i{background:#0A0A0B}
+.opt.sel .chairs i.g{border-color:#0A0A0B;background:transparent}
+.opt.sel .chairs b{color:#0A0A0B}
+
+/* campos */
+.field{display:block;margin-bottom:14px}
+.field label{display:block;font:500 13px var(--body);color:var(--muted);margin-bottom:8px}
+.field input{width:100%;height:56px;border-radius:14px;border:1px solid var(--line-2);background:rgba(255,255,255,.03);
+  color:var(--text);font:500 17px var(--body);padding:0 16px;outline:none;transition:border-color .2s,background .2s}
+.field input::placeholder{color:#55555c}
+.field input:focus{border-color:var(--lime);background:rgba(199,249,78,.04)}
+.field.err input{border-color:var(--red)}
+.field .msg{display:none;color:var(--red);font-size:12.5px;margin-top:7px}
+.field.err .msg{display:block}
+
+/* impacto */
+.impact-tag{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;padding:7px 12px;border-radius:999px;
+  background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.35);color:#FF8A8A;font:600 12px var(--body);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px}
+.impact-tag svg{width:14px;height:14px}
+.big{font:800 clamp(92px,28vw,132px)/.9 var(--display);letter-spacing:-.06em;color:var(--lime);
+  text-shadow:0 0 60px rgba(199,249,78,.35);font-variant-numeric:tabular-nums;margin:6px 0 10px}
+.big small{font-size:.42em;letter-spacing:-.02em;margin-left:4px}
+.src{color:var(--dim);font-size:12px;margin-top:10px}
+.card{margin-top:22px;border:1px solid var(--line-2);border-radius:18px;padding:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--lime)}
+.card .label{font:600 11px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+.card .hours{display:flex;align-items:baseline;gap:8px;margin:8px 0 6px}
+.card .hours b{font:800 40px var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.card .hours span{color:var(--muted);font-size:14px}
+.card p{color:var(--muted);font-size:14.5px;line-height:1.5}
+.card p strong{color:var(--text);font-weight:600}
+
+/* análise */
+.analyze{align-items:center;text-align:center;justify-content:center}
+.ring{position:relative;width:168px;height:168px;margin:10px auto 26px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:9;stroke-linecap:round}
+.ring .tr{stroke:rgba(255,255,255,.07)}
+.ring .pr{stroke:var(--lime);filter:drop-shadow(0 0 8px rgba(199,249,78,.55))}
+.ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:800 40px var(--display);
+  letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.ring .pct small{font-size:20px;color:var(--lime);margin:8px 0 0 2px}
+.checks{list-style:none;display:grid;gap:10px;margin-top:22px;text-align:left;width:100%}
+.checks li{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:13px;
+  color:var(--dim);font-size:14.5px;transition:all .35s}
+.checks li .c{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line-2);flex:none;display:grid;place-items:center;transition:all .3s}
+.checks li.ok{color:var(--text);border-color:rgba(199,249,78,.25);background:rgba(199,249,78,.04)}
+.checks li.ok .c{background:var(--lime);border-color:var(--lime)}
+.checks li.ok .c::after{content:"";width:9px;height:5px;border-left:2px solid #0A0A0B;border-bottom:2px solid #0A0A0B;transform:rotate(-45deg) translate(1px,-1px)}
+.checks li.run .c{border-color:var(--lime);border-top-color:transparent;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* resultado */
+.phase-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:20px 0 8px}
+.phase{border-radius:12px;padding:11px 10px;border:1px solid var(--line);text-align:center;transition:all .4s}
+.phase b{display:block;font:700 14px var(--display);color:var(--dim)}
+.phase span{display:block;font-size:11px;color:var(--dim);margin-top:2px}
+.phase.on{border-color:var(--lime);background:var(--lime-soft);box-shadow:0 0 0 4px rgba(199,249,78,.07)}
+.phase.on b{color:var(--lime)}
+.phase.on span{color:var(--muted)}
+.recs{list-style:none;display:grid;gap:10px;margin-top:20px}
+.recs li{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.02)}
+.recs .n{width:26px;height:26px;border-radius:8px;background:var(--lime-soft);border:1px solid var(--lime-line);color:var(--lime);
+  font:700 13px var(--display);display:grid;place-items:center}
+.recs b{display:block;font:600 15px var(--body);margin-bottom:3px}
+.recs p{color:var(--muted);font-size:13.5px;line-height:1.5}
+.wa{background:#25D366;color:#06210f;box-shadow:0 14px 34px -14px rgba(37,211,102,.7)}
+.ok-note{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:13px 14px;border-radius:13px;
+  background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--muted);font-size:13.5px;line-height:1.5}
+.ok-note svg{width:18px;height:18px;color:var(--lime);flex:none;margin-top:1px}
+
+.spinner{width:20px;height:20px;border-radius:50%;border:2.5px solid rgba(0,0,0,.25);border-top-color:#0A0A0B;animation:spin .7s linear infinite}
+
+@media (min-width:600px){.app{padding-left:24px;padding-right:24px}.screen{padding-top:34px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<div class="app">
+  <header class="top">
+    <div class="top-row">
+      <button class="back" id="back" type="button" aria-label="Voltar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Voltar
+      </button>
+      <img class="logo" src="assets/logo-wordmark-white.png" alt="DBOUT Mídia" width="106" height="19" />
+      <div class="counter" id="counter" aria-live="polite"><b id="cNow">01</b> / <span id="cTot">07</span></div>
+    </div>
+    <div class="bar" id="bar"></div>
+  </header>
+  <main class="stage" id="stage"></main>
+</div>
+
+<script>
+/* ======================= CONFIG ======================= */
+const ENDPOINT = "https://srv1809067.hstgr.cloud/dbout-quiz-lead";
+const WHATS_URL = "https://wa.link/gztag3";
+
+/* ======================= ÍCONES ======================= */
+const I = {
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  crown:'<path d="M3 8l4 4 5-7 5 7 4-4-2 11H5L3 8z"/>',
+  chart:'<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>',
+  tooth:'<path d="M7 3c-2 0-3.5 1.6-3.5 4 0 2 .8 3 1.3 5 .6 2.3.7 9 2.7 9 1.6 0 1.5-5 2.5-6.4.5-.7 1.5-.7 2 0 1 1.4.9 6.4 2.5 6.4 2 0 2.1-6.7 2.7-9 .5-2 1.3-3 1.3-5 0-2.4-1.5-4-3.5-4-1.8 0-2.7 1-5 1S8.8 3 7 3z"/>',
+  dots:'<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M10 14l4 4M14 14l-4 4"/>',
+  tag:'<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20c-.4-2.4-1.6-4-3.4-4.9"/>',
+  chat:'<path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L3 21l1.5-5.4A8.5 8.5 0 1 1 21 12z"/><path d="M9 10l6 4M15 10l-6 4"/>',
+  up:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+  pause:'<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>',
+  down:'<path d="M7 10V20H4V10h3zM7 10l4-7c1.7 0 2.5 1.2 2 3l-1 4h6a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 16.8 20H7"/>',
+  spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z"/>',
+  siren:'<path d="M7 18v-6a5 5 0 0 1 10 0v6"/><path d="M5 21h14v-3H5v3zM12 3v1M3.5 7.5l.9.5M20.5 7.5l-.9.5"/>',
+  lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  check:'<path d="M20 6L9 17l-5-5"/>',
+  wa:'<path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.7L.5 23.5l6-1.6A11.8 11.8 0 0 0 20.5 3.5zm-8.4 18.1a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.6.9 1-3.5-.2-.4a9.8 9.8 0 1 1 8.2 4.6zm5.4-7.3c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1l-.9 1.2c-.2.2-.3.2-.6.1-1.6-.8-2.7-1.4-3.8-3.3-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.6.7.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3z"/>'
+};
+const svg = (k, fill) => `<svg viewBox="0 0 24 24" ${fill ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'}>${I[k]}</svg>`;
+
+/* ======================= FLUXO ======================= */
+// valores iguais aos do formulário instantâneo da página Luis Gustavo (mesmos campos no PipeRun)
+const STEPS = [
+  { id:"intro", type:"intro" },
+  { id:"cargo", type:"choice", key:"cargo", kicker:"Pergunta 01",
+    title:'Qual é o seu <span class="hl">cargo</span> dentro da clínica?',
+    sub:"Assim adaptamos o diagnóstico à sua realidade.",
+    options:[
+      { v:"Dono", t:"Dono(a)", i:"crown" },
+      { v:"Gerente/Gestor", t:"Gerente ou gestor(a)", i:"chart" },
+      { v:"Dentista", t:"Dentista", i:"tooth" },
+      { v:"Outro", t:"Outro", i:"dots" } ] },
+  { id:"cadeiras", type:"choice", key:"cadeiras", kicker:"Pergunta 02",
+    title:'Quantas <span class="hl">cadeiras</span> odontológicas sua clínica possui?',
+    sub:"É o que define a capacidade de atendimento da sua agenda.",
+    options:[
+      { v:"1 Cadeira", t:"1 cadeira", chairs:[1,0] },
+      { v:"2 cadeiras", t:"2 cadeiras", chairs:[2,0] },
+      { v:"3 a 5 cadeiras", t:"3 a 5 cadeiras", chairs:[3,2] },
+      { v:"6 ou +", t:"6 ou mais", chairs:[6,0,"+"] } ] },
+  { id:"dor", type:"choice", key:"dor", kicker:"Pergunta 03",
+    title:'Hoje, o que mais <span class="hl">trava</span> o crescimento da sua clínica?',
+    sub:"Escolha a que mais pesa no seu mês.",
+    options:[
+      { v:"Agenda com horários vazios", t:"Agenda com horários vazios", s:"Cadeira parada no meio da semana", i:"cal" },
+      { v:"Pacientes pedem preço e somem", t:"Pacientes pedem preço e somem", s:"Muita conversa, pouca avaliação marcada", i:"tag" },
+      { v:"Dependo de indicação", t:"Dependo de indicação", s:"Sem previsibilidade de novos pacientes", i:"users" },
+      { v:"Chegam contatos mas a equipe não converte", t:"Chegam contatos, mas a equipe não converte", s:"O lead esfria antes de agendar", i:"chat" } ] },
+  { id:"impacto", type:"impact" },
+  { id:"trafego", type:"choice", key:"trafego", kicker:"Pergunta 04",
+    title:'Sua clínica já investe em <span class="hl">tráfego pago</span>?',
+    sub:"Anúncios no Instagram, Facebook ou Google.",
+    options:[
+      { v:"Sim, invisto regularmente", t:"Sim, invisto regularmente", i:"up" },
+      { v:"Já investi, mas parei", t:"Já investi, mas parei", i:"pause" },
+      { v:"Já investi, mas tive uma experiência ruim", t:"Já investi, mas tive uma experiência ruim", i:"down" },
+      { v:"Nunca investi", t:"Nunca investi", i:"spark" } ] },
+  { id:"cidade", type:"text", key:"cidade", kicker:"Pergunta 05",
+    title:'Em que <span class="hl">cidade</span> fica a sua unidade?',
+    sub:"Usamos para analisar a concorrência da sua região.",
+    placeholder:"Ex.: Campinas - SP" },
+  { id:"analise", type:"analyze" },
+  { id:"contato", type:"contact" },
+  { id:"resultado", type:"result" }
+];
+const COUNTED = ["cargo","cadeiras","dor","impacto","trafego","cidade","contato"];
+
+/* ======================= ESTADO ======================= */
+const A = {};            // respostas
+let idx = 0, busy = false;
+const hist = [];
+const qs = new URLSearchParams(location.search);
+const TRACK = {
+  utm_source: qs.get("utm_source")||"", utm_medium: qs.get("utm_medium")||"",
+  utm_campaign: qs.get("utm_campaign")||"", utm_content: qs.get("utm_content")||"",
+  utm_term: qs.get("utm_term")||"", fbclid: qs.get("fbclid")||""
+};
+const EVENT_ID = "quiz_" + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+
+const $ = s => document.querySelector(s);
+const stage = $("#stage");
+const bar = $("#bar");
+bar.innerHTML = COUNTED.map(()=>'<div class="seg"><i></i></div>').join("");
+$("#cTot").textContent = String(COUNTED.length).padStart(2,"0");
+
+function chairsNum(){ return ({"1 Cadeira":1,"2 cadeiras":2,"3 a 5 cadeiras":3,"6 ou +":6})[A.cadeiras] || 1; }
+function firstName(){ return (A.nome||"").trim().split(/\s+/)[0] || ""; }
+function track(name, data){ try{ fbq('trackCustom', name, data||{}); }catch(e){} }
+
+/* ======================= NAVEGAÇÃO ======================= */
+function go(to, push=true){
+  if(busy) return; busy = true;
+  const cur = stage.querySelector(".screen");
+  const run = () => {
+    if(push) hist.push(idx);
+    idx = to; render(); busy = false;
+    window.scrollTo({top:0, behavior:"smooth"});
+  };
+  if(cur){ cur.classList.add("leaving"); setTimeout(run, 240); } else run();
+}
+function next(){ go(idx+1); }
+$("#back").addEventListener("click", () => {
+  if(!hist.length) return;
+  const prev = hist.pop();
+  if(STEPS[prev].type === "analyze") { go(hist.pop() ?? 0, false); return; }
+  go(prev, false);
+});
+
+function chrome(){
+  const s = STEPS[idx];
+  const pos = COUNTED.indexOf(s.id);
+  const show = !["intro","analise","resultado"].includes(s.id);
+  $("#counter").classList.toggle("on", show);
+  bar.classList.toggle("on", s.id !== "intro");
+  $("#back").classList.toggle("on", show && hist.length>0 && s.id !== "cargo" || (s.id==="cargo" && hist.length>0));
+  const doneUntil = s.id==="resultado" || s.id==="analise" ? (s.id==="resultado"?COUNTED.length: COUNTED.indexOf("cidade")+1) : pos;
+  [...bar.children].forEach((seg,i)=>{
+    seg.classList.toggle("done", i < doneUntil);
+    seg.querySelector("i").style.width = i < doneUntil ? "100%" : (i===pos ? "35%" : "0");
+  });
+  if(pos>=0) $("#cNow").textContent = String(pos+1).padStart(2,"0");
+  document.body.classList.toggle("is-impact", s.type==="impact");
+}
+
+function render(){
+  const s = STEPS[idx];
+  chrome();
+  const el = document.createElement("section");
+  el.className = "screen" + (s.type==="analyze" ? " analyze" : "");
+  el.setAttribute("aria-live","polite");
+  stage.innerHTML = ""; stage.appendChild(el);
+  ({intro, choice, impact, text, analyze, contact, result})[s.type](el, s);
+  const h = el.querySelector("h1,h2"); if(h){ h.setAttribute("tabindex","-1"); h.focus({preventScroll:true}); }
+}
+
+/* ======================= TELAS ======================= */
+function intro(el){
+  el.innerHTML = `
+    <span class="pill reveal" style="--i:0"><span class="dot"></span>Diagnóstico gratuito · leva 60 segundos</span>
+    <h1 class="reveal" style="--i:1">Sua agenda não está cheia.<br><span class="hl">Vamos descobrir por quê.</span></h1>
+    <p class="lead reveal" style="--i:2">Responda 5 perguntas rápidas e receba o <strong>diagnóstico de captação da sua clínica</strong>, feito por quem já gerou mais de 400 mil leads para clínicas odontológicas.</p>
+    <div class="stats reveal" style="--i:3">
+      <div class="stat"><b><em>+</em>500</b><span>clínicas atendidas</span></div>
+      <div class="stat"><b><em>+</em>400 mil</b><span>leads gerados</span></div>
+      <div class="stat"><b><em>R$</em>20 mi</b><span>investidos em tráfego</span></div>
+    </div>
+    <div class="clients reveal" style="--i:4">
+      <div class="logos">
+        <img src="assets/cli-orthodontic.webp" alt="Orthodontic" width="30" height="30" />
+        <img src="assets/cli-oralsim.webp" alt="OralSim" width="30" height="30" />
+        <img src="assets/cli-orthopride.webp" alt="Ortho Pride" width="30" height="30" />
+        <img src="assets/cli-oralunic.webp" alt="Oral Unic" width="30" height="30" />
+      </div>
+      Redes e clínicas que já confiam na DBOUT
+    </div>
+    <div class="foot reveal" style="--i:5">
+      <button class="btn" type="button" id="start">Começar diagnóstico ${svg("arrow")}</button>
+      <p class="micro">${svg("lock")} Sem custo e sem compromisso</p>
+    </div>`;
+  el.querySelector("#start").addEventListener("click", () => { track("QuizStart"); next(); });
+}
+
+function chairsHTML(c){
+  const [solid, ghost, plus] = c;
+  return `<span class="chairs" aria-hidden="true">${"<i></i>".repeat(solid)}${'<i class="g"></i>'.repeat(ghost||0)}${plus?"<b>+</b>":""}</span>`;
+}
+
+function choice(el, s){
+  el.innerHTML = `
+    <div class="q-head">
+      <div class="kicker reveal" style="--i:0">${s.kicker}</div>
+      <h2 class="reveal" style="--i:1">${s.title}</h2>
+      ${s.sub ? `<p class="lead reveal" style="--i:2">${s.sub}</p>` : ""}
+    </div>
+    <div class="opts" role="listbox" aria-label="Opções">
+      ${s.options.map((o,k)=>`
+        <button type="button" class="opt reveal ${A[s.key]===o.v?"sel":""}" style="--i:${k+3}" data-v="${o.v}" role="option" aria-selected="${A[s.key]===o.v}">
+          ${o.chairs ? `<span class="ico" style="width:auto;padding:0 10px">${chairsHTML(o.chairs)}</span>` : `<span class="ico">${svg(o.i)}</span>`}
+          <span class="txt">${o.t}${o.s?`<small>${o.s}</small>`:""}</span>
+          <span class="key"><span>${"ABCD"[k]}</span></span>
+        </button>`).join("")}
+    </div>`;
+  const opts = el.querySelector(".opts");
+  const pick = btn => {
+    if(opts.classList.contains("locked")) return;
+    opts.querySelectorAll(".opt").forEach(b=>{ b.classList.remove("sel"); b.setAttribute("aria-selected","false"); });
+    btn.classList.add("sel"); btn.setAttribute("aria-selected","true");
+    opts.classList.add("locked");
+    A[s.key] = btn.dataset.v;
+    track("QuizStep", { step: s.id, answer: btn.dataset.v });
+    setTimeout(next, 420);
+  };
+  opts.addEventListener("click", e => { const b = e.target.closest(".opt"); if(b) pick(b); });
+  keyHandler = e => {
+    const k = e.key.toUpperCase(); const n = "ABCD".indexOf(k) >= 0 ? "ABCD".indexOf(k) : "1234".indexOf(e.key);
+    const btns = opts.querySelectorAll(".opt"); if(n>=0 && btns[n]) pick(btns[n]);
+  };
+}
+let keyHandler = null;
+document.addEventListener("keydown", e => { if(keyHandler && !e.target.closest("input")) keyHandler(e); });
+
+const DOR_LINE = {
+  "Agenda com horários vazios": "Horário vazio não volta: a hora que passou não pode ser vendida de novo.",
+  "Pacientes pedem preço e somem": "Na maior parte das vezes não é o preço, é o tempo. Quem esfria não volta para responder.",
+  "Dependo de indicação": "Indicação é ótima, mas não dá para planejar o mês em cima dela.",
+  "Chegam contatos mas a equipe não converte": "Lead bom com atendimento lento vira lead perdido, e o anúncio leva a culpa."
+};
+
+function countUp(node, to, ms, fmt){
+  const t0 = performance.now();
+  const step = t => {
+    const p = Math.min(1, (t - t0) / ms); const e = 1 - Math.pow(1 - p, 3);
+    node.textContent = fmt ? fmt(Math.round(to * e)) : Math.round(to * e);
+    if(p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function impact(el){
+  keyHandler = null;
+  const n = chairsNum(); const horas = n * 22;
+  const plural = n > 1 ? "cadeiras" : "cadeira";
+  const minimo = A.cadeiras === "3 a 5 cadeiras" || A.cadeiras === "6 ou +" ? "pelo menos " : "";
+  el.innerHTML = `
+    <span class="impact-tag reveal" style="--i:0">${svg("siren")} Você sabia?</span>
+    <h2 class="reveal" style="--i:1">Quem responde o contato na <span class="hl">primeira hora</span> tem quase</h2>
+    <div class="big reveal" style="--i:2"><span id="bigN">0</span><small>x</small></div>
+    <p class="lead reveal" style="--i:3" style="margin-top:0">mais chance de transformar o contato em conversa de verdade do que quem demora mais de uma hora.</p>
+    <p class="src reveal" style="--i:4">Fonte: Harvard Business Review, "The Short Life of Online Sales Leads".</p>
+    <div class="card reveal" style="--i:5">
+      <div class="label">Na sua clínica</div>
+      <div class="hours"><b id="hrs">0</b><span>horas de cadeira parada por mês</span></div>
+      <p>Com ${minimo}<strong>${n} ${plural}</strong>, basta cada uma ficar <strong>1 hora vazia por dia</strong> para somar isso em 22 dias úteis. ${DOR_LINE[A.dor] || ""}</p>
+    </div>
+    <div class="foot reveal" style="--i:6">
+      <button class="btn" type="button" id="go">Continuar diagnóstico ${svg("arrow")}</button>
+    </div>`;
+  setTimeout(()=>countUp(el.querySelector("#bigN"), 7, 1100), 450);
+  setTimeout(()=>countUp(el.querySelector("#hrs"), horas, 1300), 900);
+  el.querySelector("#go").addEventListener("click", () => { track("QuizStep", { step:"impacto" }); next(); });
+}
+
+function text(el, s){
+  keyHandler = null;
+  el.innerHTML = `
+    <div class="q-head">
+      <div class="kicker reveal" style="--i:0">${s.kicker}</div>
+      <h2 class="reveal" style="--i:1">${s.title}</h2>
+      <p class="lead reveal" style="--i:2">${s.sub}</p>
+    </div>
+    <div class="field reveal" style="--i:3" id="f">
+      <label for="in">Cidade e estado</label>
+      <input id="in" type="text" autocomplete="address-level2" placeholder="${s.placeholder}" value="${A[s.key]||""}" />
+      <div class="msg">Informe a cidade da sua unidade.</div>
+    </div>
+    <div class="foot reveal" style="--i:4">
+      <button class="btn" type="button" id="go">Continuar ${svg("arrow")}</button>
+    </div>`;
+  const inp = el.querySelector("#in"), f = el.querySelector("#f");
+  const submit = () => {
+    const v = inp.value.trim();
+    if(v.length < 2){ f.classList.add("err"); inp.focus(); return; }
+    A[s.key] = v; track("QuizStep", { step: s.id }); next();
+  };
+  el.querySelector("#go").addEventListener("click", submit);
+  inp.addEventListener("keydown", e => { if(e.key==="Enter") submit(); f.classList.remove("err"); });
+  setTimeout(()=>inp.focus(), 450);
+}
+
+function analyze(el){
+  keyHandler = null;
+  const C = 2 * Math.PI * 70;
+  const items = ["Perfil e poder de decisão","Capacidade de atendimento","Maior trava da operação","Canal de aquisição e região"];
+  el.innerHTML = `
+    <h2 class="reveal" style="--i:0">Montando seu diagnóstico</h2>
+    <p class="lead reveal" style="--i:1">Cruzando suas respostas com dados de mais de 500 clínicas.</p>
+    <div class="ring reveal" style="--i:2">
+      <svg viewBox="0 0 168 168"><circle class="tr" cx="84" cy="84" r="70"/><circle class="pr" id="pr" cx="84" cy="84" r="70" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg>
+      <div class="pct"><span id="pct">0</span><small>%</small></div>
+    </div>
+    <ul class="checks">${items.map(t=>`<li><span class="c"></span>${t}</li>`).join("")}</ul>`;
+  const pr = el.querySelector("#pr"), pct = el.querySelector("#pct"), lis = el.querySelectorAll(".checks li");
+  const total = 3600, t0 = performance.now();
+  const tick = t => {
+    const p = Math.min(1, (t - t0) / total);
+    const e = p < .5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2)/2;
+    pr.style.strokeDashoffset = C * (1 - e);
+    pct.textContent = Math.round(e*100);
+    lis.forEach((li,i)=>{ const a = i/items.length, b = (i+1)/items.length;
+      li.classList.toggle("run", e>=a && e<b); li.classList.toggle("ok", e>=b); });
+    if(p < 1) requestAnimationFrame(tick); else setTimeout(next, 450);
+  };
+  requestAnimationFrame(tick);
+}
+
+function maskPhone(v){
+  const d = v.replace(/\D/g,"").slice(0,11);
+  if(d.length > 10) return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+  if(d.length > 6) return `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+  if(d.length > 2) return `(${d.slice(0,2)}) ${d.slice(2)}`;
+  return d.length ? `(${d}` : "";
+}
+
+function contact(el){
+  keyHandler = null;
+  el.innerHTML = `
+    <div class="q-head">
+      <div class="kicker reveal" style="--i:0">Último passo</div>
+      <h2 class="reveal" style="--i:1">Seu diagnóstico está pronto. <span class="hl">Para quem enviamos?</span></h2>
+      <p class="lead reveal" style="--i:2">Um especialista da DBOUT vai te chamar no WhatsApp para explicar o resultado.</p>
+    </div>
+    <form id="form" novalidate>
+      <div class="field reveal" style="--i:3" id="fN"><label for="nome">Nome completo</label>
+        <input id="nome" type="text" autocomplete="name" placeholder="Seu nome" value="${A.nome||""}" />
+        <div class="msg">Digite seu nome completo.</div></div>
+      <div class="field reveal" style="--i:4" id="fW"><label for="whats">WhatsApp com DDD</label>
+        <input id="whats" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(11) 99999-9999" value="${A.whatsapp||""}" />
+        <div class="msg">Digite um WhatsApp válido com DDD.</div></div>
+      <div class="field reveal" style="--i:5" id="fE"><label for="email">E-mail</label>
+        <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="voce@suaclinica.com.br" value="${A.email||""}" />
+        <div class="msg">Digite um e-mail válido.</div></div>
+      <div class="foot reveal" style="--i:6">
+        <button class="btn" type="submit" id="send">Ver meu diagnóstico ${svg("arrow")}</button>
+        <p class="micro">${svg("lock")} Seus dados ficam só com a DBOUT. Nada de spam.</p>
+      </div>
+    </form>`;
+  const w = el.querySelector("#whats");
+  w.addEventListener("input", () => { w.value = maskPhone(w.value); });
+  el.querySelectorAll("input").forEach(i => i.addEventListener("input", () => i.closest(".field").classList.remove("err")));
+  el.querySelector("#form").addEventListener("submit", async e => {
+    e.preventDefault();
+    const nome = el.querySelector("#nome").value.trim();
+    const fone = w.value.replace(/\D/g,"");
+    const email = el.querySelector("#email").value.trim();
+    let ok = true;
+    if(nome.split(/\s+/).filter(Boolean).length < 2 || nome.length < 5){ el.querySelector("#fN").classList.add("err"); ok = false; }
+    if(fone.length < 10 || fone.length > 11){ el.querySelector("#fW").classList.add("err"); ok = false; }
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ el.querySelector("#fE").classList.add("err"); ok = false; }
+    if(!ok) return;
+    A.nome = nome; A.whatsapp = fone; A.email = email; A.fase = fase().nome;
+    const btn = el.querySelector("#send"); btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+    const fbp = (document.cookie.match(/_fbp=([^;]+)/)||[])[1] || "";
+    const payload = { ...A, ...TRACK, event_id: EVENT_ID, fbp, page_url: location.href };
+    try{
+      await fetch(ENDPOINT, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify(payload), keepalive:true });
+    }catch(err){ /* segue para o resultado mesmo se a rede falhar */ }
+    try{ fbq('track','Lead', { content_name:"Quiz Diagnóstico DBOUT", lead_stage: A.fase }, { eventID: EVENT_ID }); }catch(err){}
+    next();
+  });
+  setTimeout(()=>el.querySelector("#nome").focus(), 450);
+}
+
+/* fase a partir do tráfego (mesma lógica que vai para a planilha e o PipeRun) */
+function fase(){
+  if(A.trafego === "Sim, invisto regularmente") return { i:2, nome:"Escala",
+    txt:"Você já tem o motor ligado. O ganho agora está em baixar o custo por paciente e aproveitar melhor cada contato que já chega." };
+  if(A.trafego === "Nunca investi") return { i:0, nome:"Base",
+    txt:"Sua clínica ainda cresce no boca a boca. O próximo passo é ligar uma fonte previsível de pacientes novos, sem depender só de indicação." };
+  return { i:1, nome:"Retomada",
+    txt:"Você já testou e o canal não se pagou. Quase sempre o problema não é o anúncio em si, é o que acontece em volta dele: oferta, atendimento e acompanhamento." };
+}
+
+function recs(){
+  const n = chairsNum();
+  const out = [];
+  const porDor = {
+    "Agenda com horários vazios": ["Previsibilidade de agenda", "Campanhas contínuas para preencher os horários da semana, medidas em avaliações marcadas e não em curtidas."],
+    "Pacientes pedem preço e somem": ["Oferta que justifica a avaliação", "Trocar a conversa sobre preço por um motivo claro para o paciente ir até a clínica."],
+    "Dependo de indicação": ["Uma segunda fonte de pacientes", "Tráfego pago rodando ao lado da indicação, para o mês não depender de sorte."],
+    "Chegam contatos mas a equipe não converte": ["Atendimento em até 1 hora", "Roteiro de WhatsApp e acompanhamento para o lead não esfriar antes de agendar."]
+  };
+  out.push(porDor[A.dor] || porDor["Agenda com horários vazios"]);
+  out.push(["Meta pela capacidade real", `Com ${A.cadeiras === "6 ou +" ? "6 ou mais cadeiras" : A.cadeiras === "3 a 5 cadeiras" ? "3 a 5 cadeiras" : n + (n>1?" cadeiras":" cadeira")}, o volume de avaliações por semana precisa ser planejado a partir das horas livres, não de um número genérico.`]);
+  out.push([A.trafego === "Sim, invisto regularmente" ? "Auditoria das campanhas atuais" : "Plano de entrada seguro",
+    A.trafego === "Sim, invisto regularmente"
+      ? "Revisar onde o investimento está escapando: público, criativo e o caminho até o WhatsApp."
+      : `Começar com um investimento controlado e campanhas pensadas para ${A.cidade || "a sua região"}.`]);
+  return out;
+}
+
+function result(el){
+  keyHandler = null;
+  const f = fase(); const nm = firstName();
+  el.innerHTML = `
+    <div class="kicker reveal" style="--i:0">Diagnóstico de ${nm || "captação"}</div>
+    <h2 class="reveal" style="--i:1">${nm ? nm + ", sua" : "Sua"} clínica está na fase <span class="hl">${f.nome}</span>.</h2>
+    <div class="phase-bar reveal" style="--i:2">
+      ${[["Base","depende de indicação"],["Retomada","já testou anúncios"],["Escala","anúncio rodando"]].map((p,k)=>`<div class="phase ${k===f.i?"on":""}"><b>${p[0]}</b><span>${p[1]}</span></div>`).join("")}
+    </div>
+    <p class="lead reveal" style="--i:3">${f.txt}</p>
+    <ul class="recs">${recs().map((r,k)=>`<li class="reveal" style="--i:${k+4}"><span class="n">${k+1}</span><div><b>${r[0]}</b><p>${r[1]}</p></div></li>`).join("")}</ul>
+    <div class="ok-note reveal" style="--i:7">${svg("check")}<span>Recebemos suas respostas. Um especialista da DBOUT vai te chamar no WhatsApp para aprofundar esse diagnóstico com você.</span></div>
+    <div class="foot reveal" style="--i:8">
+      <a class="btn wa" href="${WHATS_URL}" target="_blank" rel="noopener" id="wa">${svg("wa", true)} Falar agora com um especialista</a>
+    </div>`;
+  el.querySelector("#wa").addEventListener("click", () => track("QuizWhatsApp"));
+}
+
+render();
+</script>
+</body>
+</html>
